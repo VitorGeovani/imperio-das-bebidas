@@ -1,0 +1,172 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Vendas</h2>
+      <button class="btn btn-primary" (click)="toggleForm()">
+        {{ showForm ? 'Cancelar' : 'Nova Venda' }}
+      </button>
+    </div>
+  
+    <div *ngIf="showForm" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">{{ isEditing ? 'Editar' : 'Nova' }} Venda</h5>
+        
+        <div *ngIf="formError" class="alert alert-danger">{{ formError }}</div>
+        
+        <form (ngSubmit)="onSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="cliente" class="form-label">Cliente</label>
+              <select class="form-control" id="cliente" [(ngModel)]="vendaForm.clienteId" name="clienteId" required>
+                <option [ngValue]="null">Selecione um cliente</option>
+                <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6">
+              <label for="dataVenda" class="form-label">Data da Venda</label>
+              <input type="date" class="form-control" id="dataVenda" [(ngModel)]="vendaForm.dataVenda" name="dataVenda" required>
+            </div>
+          </div>
+          
+          <!-- Seção de itens da venda -->
+          <div class="card mb-3">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Itens da Venda</h6>
+            </div>
+            <div class="card-body">
+              <!-- Adicionar novo item -->
+              <div class="row mb-3">
+                <div class="col-md-5">
+                  <label for="produto" class="form-label">Produto</label>
+                  <select class="form-control" id="produto" [(ngModel)]="itemTemp.produtoId" name="produtoId">
+                    <option [ngValue]="null">Selecione um produto</option>
+                    <option *ngFor="let produto of produtos" [value]="produto.id">
+                      {{ produto.nome }} - {{ produto.preco | currency:'BRL' }}
+                      {{ produto.quantidade > 0 ? '(Estoque: ' + produto.quantidade + ')' : '(Sem estoque)' }}
+                    </option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <label for="quantidade" class="form-label">Quantidade</label>
+                  <input type="number" class="form-control" id="quantidade" 
+                        [(ngModel)]="itemTemp.quantidade" name="quantidade" 
+                        min="1" step="1">
+                </div>
+                
+                <div class="col-md-4 d-flex align-items-end">
+                  <button type="button" class="btn btn-success" (click)="adicionarItem()">
+                    <i class="bi bi-plus-circle"></i> Adicionar Item
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Tabela de itens adicionados -->
+              <div *ngIf="vendaForm.itens.length" class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Produto</th>
+                      <th>Preço Unit.</th>
+                      <th>Qtde</th>
+                      <th>Subtotal</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of vendaForm.itens; let i = index">
+                      <td>{{ item.produto.nome }}</td>
+                      <td>{{ formatarMoeda(item.precoUnitario) }}</td>
+                      <td>{{ item.quantidade }}</td>
+                      <td>{{ formatarMoeda(item.subtotal) }}</td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-danger" (click)="removerItem(i)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="table-info">
+                      <td colspan="3" class="text-end fw-bold">Total:</td>
+                      <td class="fw-bold">{{ formatarMoeda(vendaForm.valorTotal || 0) }}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div *ngIf="!vendaForm.itens.length" class="alert alert-info">
+                Nenhum item adicionado à venda.
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="formaPagamento" class="form-label">Forma de Pagamento</label>
+              <select class="form-control" id="formaPagamento" [(ngModel)]="vendaForm.formaPagamento" name="formaPagamento">
+                <option *ngFor="let forma of formasPagamento" [value]="forma">{{ forma }}</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6">
+              <label for="observacoes" class="form-label">Observações</label>
+              <textarea class="form-control" id="observacoes" [(ngModel)]="vendaForm.observacoes" 
+                       name="observacoes" rows="1"></textarea>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="resetForm()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading || !vendaForm.itens.length">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isEditing ? 'Atualizar Venda' : 'Finalizar Venda' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <div *ngIf="isLoading && !vendas.length" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && !vendas.length" class="alert alert-info">
+      Nenhuma venda cadastrada.
+    </div>
+  
+    <div *ngIf="vendas.length" class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Itens</th>
+            <th>Valor Total</th>
+            <th>Forma Pagamento</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venda of vendas">
+            <td>{{ venda.id }}</td>
+            <td>{{ venda.cliente.nome }}</td>
+            <td>{{ formatDate(venda.dataVenda) }}</td>
+            <td>{{ venda.itens.length }} item(ns)</td>
+            <td>{{ formatarMoeda(venda.valorTotal) }}</td>
+            <td>{{ venda.formaPagamento || 'N/A' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="editVenda(venda)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteVenda(venda.id!)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

@@ -1,0 +1,52 @@
+<header class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto me-auto" *ngIf="authService.isLoggedIn()">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/clientes" routerLinkActive="active">
+            <i class="bi bi-people me-1"></i>Clientes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/produtos" routerLinkActive="active">
+            <i class="bi bi-cup-straw me-1"></i>Bebidas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/vendas" routerLinkActive="active">
+            <i class="bi bi-cart-check me-1"></i>Vendas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/usuarios" routerLinkActive="active">
+            <i class="bi bi-person-gear me-1"></i>Usuários
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav" *ngIf="authService.isLoggedIn()">
+        <!-- Novo elemento para mostrar o usuário logado -->
+        <li class="nav-item me-3">
+          <span class="nav-link user-info">
+            <i class="bi bi-person-circle me-1"></i>
+            <span class="username">{{ userData?.nome || 'Usuário' }}</span>
+          </span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-outline-light btn-sm logout-btn" href="javascript:void(0)" (click)="logout()">
+            <i class="bi bi-box-arrow-right me-1"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

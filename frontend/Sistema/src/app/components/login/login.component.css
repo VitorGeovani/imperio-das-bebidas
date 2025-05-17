@@ -1,0 +1,89 @@
+.login-wrapper {
+  background: linear-gradient(135deg, #1d2b53 0%, #483a8c 100%);
+  height: 100vh; /* Alterado de min-height para height fixo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Impede rolagem */
+  padding: 0; /* Remove padding que pode causar overflow */
+}
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  max-height: 95vh; /* Limita a altura para garantir que caiba na tela */
+  overflow-y: auto; /* Permite rolagem apenas dentro do container se necessário */
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo {
+  max-width: 150px; /* Reduzido para ocupar menos espaço vertical */
+  height: auto;
+}
+
+.form-control, .input-group-text {
+  border: none;
+  height: 45px; /* Reduzido para ocupar menos espaço vertical */
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(29, 43, 83, 0.2);
+  border-color: #1d2b53;
+}
+
+.login-btn {
+  background-color: #1d2b53;
+  border-color: #1d2b53;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 0.6rem; /* Reduzido para ocupar menos espaço vertical */
+  transition: all 0.3s;
+}
+
+.login-btn:hover:not(:disabled) {
+  background-color: #483a8c;
+  border-color: #483a8c;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-form .form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 0.3rem; /* Reduzido para ocupar menos espaço vertical */
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+}
+
+.input-group {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Ajustes para o card interno */
+.card-body {
+  padding: 1.5rem !important; /* Reduz o padding interno */
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important; /* Reduzido para ocupar menos espaço vertical */
+}
+
+/* Garantir que o html e body não tenham margens ou paddings que causem rolagem */
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* Remover classe não utilizada */
+/* .login-component {} */

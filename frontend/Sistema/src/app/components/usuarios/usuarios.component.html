@@ -1,0 +1,85 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Usuários</h2>
+      <button class="btn btn-primary" (click)="toggleForm()">
+        {{ showForm ? 'Cancelar' : 'Novo Usuário' }}
+      </button>
+    </div>
+  
+    <div *ngIf="showForm" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">{{ isEditing ? 'Editar' : 'Novo' }} Usuário</h5>
+        
+        <div *ngIf="formError" class="alert alert-danger">{{ formError }}</div>
+        
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" [(ngModel)]="usuarioForm.nome" name="nome" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="usuarioForm.email" name="email" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="senha" class="form-label">{{ isEditing ? 'Nova Senha (deixe em branco para manter a atual)' : 'Senha' }}</label>
+            <div class="input-group">
+              <input [type]="hidePassword ? 'password' : 'text'" class="form-control" id="senha" 
+                    [(ngModel)]="usuarioForm.senha" name="senha" [required]="!isEditing">
+              <button type="button" class="btn btn-outline-secondary" (click)="hidePassword = !hidePassword">
+                <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="resetForm()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isEditing ? 'Atualizar' : 'Salvar' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <div *ngIf="isLoading && !usuarios.length" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && !usuarios.length" class="alert alert-info">
+      Nenhum usuário cadastrado.
+    </div>
+  
+    <div *ngIf="usuarios.length" class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="editUsuario(usuario)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteUsuario(usuario.id)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

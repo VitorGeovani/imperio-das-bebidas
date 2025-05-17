@@ -1,0 +1,100 @@
+<div class="container mt-4">
+  <h2>Gerenciamento de Clientes</h2>
+
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      {{ isEditing ? 'Editar Cliente' : 'Cadastrar Novo Cliente' }}
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="saveCliente()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nome" class="form-label">Nome/Razão Social</label>
+            <input type="text" class="form-control" id="nome" [(ngModel)]="clienteForm.nome" name="nome" required>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="cnpj" class="form-label">CNPJ</label>
+            <input type="text" class="form-control" id="cnpj" [(ngModel)]="clienteForm.cnpj" name="cnpj" 
+                  (input)="formatCnpj($event)" maxlength="18" required 
+                  [ngClass]="{'is-invalid': cnpjError}">
+            <div class="invalid-feedback" *ngIf="cnpjError">
+              {{ cnpjError }}
+            </div>
+            <small class="form-text text-muted">Formato: xx.xxx.xxx/xxxx-xx</small>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="endereco" class="form-label">Endereço</label>
+          <input type="text" class="form-control" id="endereco" [(ngModel)]="clienteForm.endereco" name="endereco">
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="telefone" class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="telefone" [(ngModel)]="clienteForm.telefone" name="telefone">
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="clienteForm.email" name="email">
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="resetForm()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditing ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading && !clientes.length" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !clientes.length" class="alert alert-info">
+    Nenhum cliente cadastrado.
+  </div>
+
+  <div *ngIf="clientes.length" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nome/Razão Social</th>
+          <th>CNPJ</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.id }}</td>
+          <td>{{ cliente.nome }}</td>
+          <td>{{ formatarCnpjExibicao(cliente.cnpj) }}</td>
+          <td>{{ cliente.telefone || 'N/A' }}</td>
+          <td>{{ cliente.email || 'N/A' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editCliente(cliente)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteCliente(cliente.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

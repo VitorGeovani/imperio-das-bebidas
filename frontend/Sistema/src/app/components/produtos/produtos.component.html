@@ -1,0 +1,110 @@
+<div class="container mt-4">
+  <h2>Gerenciamento de Bebidas</h2>
+
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      {{ isEditing ? 'Editar Bebida' : 'Cadastrar Nova Bebida' }}
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="saveProduto()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nome" class="form-label">Nome da Bebida</label>
+            <input type="text" class="form-control" id="nome" [(ngModel)]="produtoForm.nome" name="nome" required>
+          </div>
+          
+          <div class="col-md-3 mb-3">
+            <label for="preco" class="form-label">Preço (R$)</label>
+            <input type="number" class="form-control" id="preco" [(ngModel)]="produtoForm.preco" name="preco" min="0.01" step="0.01" required>
+          </div>
+          
+          <div class="col-md-3 mb-3">
+            <label for="quantidade" class="form-label">Quantidade em Estoque</label>
+            <input type="number" class="form-control" id="quantidade" [(ngModel)]="produtoForm.quantidade" name="quantidade" min="0" required>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea class="form-control" id="descricao" [(ngModel)]="produtoForm.descricao" name="descricao" rows="2"></textarea>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="categoria" class="form-label">Categoria</label>
+            <select class="form-select" id="categoria" [(ngModel)]="produtoForm.categoria" name="categoria">
+              <option value="">Selecione uma categoria</option>
+              <option value="Cerveja">Cerveja</option>
+              <option value="Vinho">Vinho</option>
+              <option value="Destilado">Destilado</option>
+              <option value="Refrigerante">Refrigerante</option>
+              <option value="Suco">Suco</option>
+              <option value="Água">Água</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+          
+          <div class="col-md-6 mb-3">
+            <label for="fornecedor" class="form-label">Fornecedor</label>
+            <input type="text" class="form-control" id="fornecedor" [(ngModel)]="produtoForm.fornecedor" name="fornecedor">
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="resetForm()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditing ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading && !produtos.length" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !produtos.length" class="alert alert-info">
+    Nenhuma bebida cadastrada.
+  </div>
+
+  <div *ngIf="produtos.length" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Preço</th>
+          <th>Estoque</th>
+          <th>Categoria</th>
+          <th>Fornecedor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let produto of produtos">
+          <td>{{ produto.id }}</td>
+          <td>{{ produto.nome }}</td>
+          <td>R$ {{ produto.preco.toFixed(2) }}</td>
+          <td>{{ produto.quantidade }}</td>
+          <td>{{ produto.categoria || 'N/A' }}</td>
+          <td>{{ produto.fornecedor || 'N/A' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editProduto(produto)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteProduto(produto.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
