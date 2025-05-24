@@ -32,7 +32,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     LoginComponent,
     ClientesComponent,
     ProdutosComponent,
-    VendasComponent // Mantém aqui, pois agora o componente é standalone
+    VendasComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

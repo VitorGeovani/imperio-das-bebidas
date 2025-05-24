@@ -1,35 +1,56 @@
+/* Estilos globais para garantir que o fundo cubra toda a página */
+:host {
+  display: block;
+  height: 100%;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Container principal com fundo gradiente */
 .login-wrapper {
   background: linear-gradient(135deg, #1d2b53 0%, #483a8c 100%);
-  height: 100vh; /* Alterado de min-height para height fixo */
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Impede rolagem */
-  padding: 0; /* Remove padding que pode causar overflow */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .login-container {
   width: 100%;
   max-width: 450px;
-  max-height: 95vh; /* Limita a altura para garantir que caiba na tela */
-  overflow-y: auto; /* Permite rolagem apenas dentro do container se necessário */
+  padding: 0 15px;
 }
 
 .card {
   border: none;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .login-logo {
-  max-width: 150px; /* Reduzido para ocupar menos espaço vertical */
+  max-width: 150px;
   height: auto;
+  margin: 0 auto 1rem;
+  display: block;
 }
 
 .form-control, .input-group-text {
   border: none;
-  height: 45px; /* Reduzido para ocupar menos espaço vertical */
+  height: 45px;
 }
 
 .form-control:focus {
@@ -42,8 +63,9 @@
   border-color: #1d2b53;
   font-weight: 600;
   letter-spacing: 0.5px;
-  padding: 0.6rem; /* Reduzido para ocupar menos espaço vertical */
+  padding: 0.6rem;
   transition: all 0.3s;
+  width: 100%;
 }
 
 .login-btn:hover:not(:disabled) {
@@ -57,7 +79,7 @@
   font-weight: 600;
   font-size: 0.9rem;
   color: #444;
-  margin-bottom: 0.3rem; /* Reduzido para ocupar menos espaço vertical */
+  margin-bottom: 0.3rem;
 }
 
 .input-group-text {
@@ -72,18 +94,17 @@
 
 /* Ajustes para o card interno */
 .card-body {
-  padding: 1.5rem !important; /* Reduz o padding interno */
+  padding: 1.5rem;
 }
 
 .mb-4 {
-  margin-bottom: 1rem !important; /* Reduzido para ocupar menos espaço vertical */
+  margin-bottom: 1rem !important;
 }
 
-/* Garantir que o html e body não tenham margens ou paddings que causem rolagem */
-:host {
-  display: block;
-  height: 100%;
+/* Centralizar texto de copyright */
+.text-center {
+  text-align: center;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #6c757d;
 }
-
-/* Remover classe não utilizada */
-/* .login-component {} */

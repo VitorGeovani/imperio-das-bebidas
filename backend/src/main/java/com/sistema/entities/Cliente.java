@@ -19,9 +19,8 @@ public class Cliente {
 
     @NotBlank(message = "CNPJ é obrigatório")
     @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter 14 dígitos")
-    private String cnpj; // Alterado de CPF para CNPJ
+    private String cnpj;
 
-    // Campos adicionais para distribuidora de bebidas
     private String endereco;
     private String telefone;
     private String email;

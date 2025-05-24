@@ -16,39 +16,39 @@ import java.util.List;
 @RequestMapping("/api/vendas")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class VendaResource {
-    
+
     @Autowired
     private VendaService vendaService;
-    
+
     @GetMapping
     public ResponseEntity<List<Venda>> findAll() {
         List<Venda> vendas = vendaService.findAll();
         return ResponseEntity.ok(vendas);
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Venda> findById(@PathVariable Long id) {
         Venda venda = vendaService.findById(id);
         return ResponseEntity.ok(venda);
     }
-    
+
     @PostMapping
     public ResponseEntity<Venda> create(@Valid @RequestBody VendaDTO vendaDTO) {
         try {
             Venda venda = vendaService.fromDTO(vendaDTO);
             venda = vendaService.save(venda);
-            
+
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(venda.getId())
                     .toUri();
-                    
+
             return ResponseEntity.created(uri).body(venda);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar venda: " + e.getMessage(), e);
         }
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Venda> update(@PathVariable Long id, @Valid @RequestBody VendaDTO vendaDTO) {
         try {
@@ -59,7 +59,7 @@ public class VendaResource {
             throw new RuntimeException("Erro ao atualizar venda: " + e.getMessage(), e);
         }
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         vendaService.delete(id);

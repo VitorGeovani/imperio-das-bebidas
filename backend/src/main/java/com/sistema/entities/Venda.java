@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Venda {
 
     @Id
@@ -28,11 +28,11 @@ public class Venda {
 
     @DecimalMin(value = "0.0", inclusive = true)
     private BigDecimal valorTotal;
-    
+
     private String formaPagamento;
-    
+
     private String observacoes;
-    
+
     private String status;
 
     public Venda() {
@@ -86,27 +86,27 @@ public class Venda {
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
-    
+
     public String getFormaPagamento() {
         return formaPagamento;
     }
-    
+
     public void setFormaPagamento(String formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
-    
+
     public String getObservacoes() {
         return observacoes;
     }
-    
+
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
-    
+
     public String getStatus() {
         return status;
     }
-    
+
     public void setStatus(String status) {
         this.status = status;
     }

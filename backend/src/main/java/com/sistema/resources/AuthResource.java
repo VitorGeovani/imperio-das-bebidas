@@ -22,20 +22,19 @@ public class AuthResource {
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciais) {
         String email = credenciais.get("email");
         String senha = credenciais.get("senha");
-        
+
         // Log para diagnóstico
         System.out.println("Tentativa de login - Email: " + email);
-        
+
         Optional<Usuario> usuario = authService.authenticate(email, senha);
-        
+
         if (usuario.isPresent()) {
             Map<String, Object> response = new HashMap<>();
             response.put("id", usuario.get().getId());
             response.put("nome", usuario.get().getNome());
             response.put("email", usuario.get().getEmail());
             response.put("message", "Login realizado com sucesso");
-            // Não incluímos mais o token
-            
+
             return ResponseEntity.ok(response);
         } else {
             Map<String, String> response = new HashMap<>();

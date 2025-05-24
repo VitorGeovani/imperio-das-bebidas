@@ -20,14 +20,14 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // Não interceptamos requisições para login e registro
+    // Não interceptar requisições para login e registro
     if (request.url.includes('/api/auth/login') || request.url.includes('/api/auth/register')) {
       return next.handle(request);
     }
 
     // Se o usuário estiver autenticado, adicionamos credenciais
     if (this.authService.isLoggedIn()) {
-      // Usar HTTP Basic Auth com admin/admin123
+      // HTTP Basic Auth com admin/admin123
       const credentials = btoa('admin:admin123');
       const authReq = request.clone({
         setHeaders: {

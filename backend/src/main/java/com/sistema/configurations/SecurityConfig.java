@@ -28,70 +28,67 @@ public class SecurityConfig {
 
     @Value("${spring.security.user.password:admin123}")
     private String adminPassword;
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configuração para Spring Security 5.5.x (Spring Boot 2.5.x)
         http
-            .cors().configurationSource(corsConfigurationSource()).and()
-            .csrf().disable()
-            .authorizeRequests()  // Use authorizeRequests em vez de authorizeHttpRequests
+                .cors().configurationSource(corsConfigurationSource()).and()
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
-            .sessionManagement()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-            .formLogin().permitAll().and()
-            .httpBasic();
-        
+                .formLogin().permitAll().and()
+                .httpBasic();
+
         // Permite frames para H2 console
         http.headers().frameOptions().disable();
-        
+
         return http.build();
     }
-    
+
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails adminUser = User.builder()
-            .username(adminUsername)
-            .password(passwordEncoder().encode(adminPassword))
-            .roles("ADMIN")
-            .build();
-            
+                .username(adminUsername)
+                .password(passwordEncoder().encode(adminPassword))
+                .roles("ADMIN")
+                .build();
+
         return new InMemoryUserDetailsManager(adminUser);
     }
-    
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList(
-            HttpMethod.GET.name(), 
-            HttpMethod.POST.name(), 
-            HttpMethod.PUT.name(), 
-            HttpMethod.DELETE.name(), 
-            HttpMethod.OPTIONS.name()
-        ));
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name(),
+                HttpMethod.OPTIONS.name()));
         configuration.setAllowedHeaders(Arrays.asList(
-            "Authorization", 
-            "Cache-Control", 
-            "Content-Type", 
-            "Accept", 
-            "Origin", 
-            "X-Requested-With"
-        ));
+                "Authorization",
+                "Cache-Control",
+                "Content-Type",
+                "Accept",
+                "Origin",
+                "X-Requested-With"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

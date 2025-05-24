@@ -6,7 +6,7 @@ export interface ItemVenda {
   produtoId?: number;
   quantidade: number;
   precoUnitario: number;
-  valorUnitario?: number; // Adicionado para compatibilidade com o backend
+  valorUnitario?: number;
   subtotal?: number;
   venda?: any;
 }

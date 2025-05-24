@@ -50,7 +50,7 @@ public class UsuarioResource {
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        
+
         if (auth != null && auth.isAuthenticated()) {
             Map<String, Object> userData = new HashMap<>();
             userData.put("nome", auth.getName());
@@ -58,7 +58,7 @@ public class UsuarioResource {
             userData.put("id", 1); // ID temporário
             return ResponseEntity.ok(userData);
         }
-        
+
         return ResponseEntity.status(401).body("Usuário não autenticado");
     }
 }

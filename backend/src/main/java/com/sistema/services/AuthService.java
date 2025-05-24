@@ -14,13 +14,13 @@ public class AuthService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Optional<Usuario> authenticate(String email, String senha) {
         // Log para diagnóstico
         System.out.println("Autenticando usuário: " + email);
-        
+
         // Verificar credenciais de admin hardcoded
         if ("admin@imperio.com".equals(email) && "admin123".equals(senha)) {
             System.out.println("Autenticação bem-sucedida para admin");
@@ -31,7 +31,7 @@ public class AuthService {
             adminUser.setEmail("admin@imperio.com");
             return Optional.of(adminUser);
         }
-        
+
         // Verificar credenciais de usuário padrão
         if ("funcionario@imperio.com".equals(email) && "func123".equals(senha)) {
             System.out.println("Autenticação bem-sucedida para user");
@@ -41,7 +41,7 @@ public class AuthService {
             standardUser.setEmail("user");
             return Optional.of(standardUser);
         }
-        
+
         // Verificar no banco de dados
         try {
             Usuario usuario = usuarioRepository.findByEmail(email);
@@ -53,11 +53,11 @@ public class AuthService {
             System.err.println("Erro ao verificar usuário no banco de dados: " + e.getMessage());
             e.printStackTrace();
         }
-        
+
         System.out.println("Autenticação falhou para: " + email);
         return Optional.empty();
     }
-    
+
     @Transactional
     public Usuario registerUser(Usuario usuario) {
         // Criptografar a senha antes de salvar

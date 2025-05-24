@@ -7,7 +7,7 @@ import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ItemVenda {
 
     @Id

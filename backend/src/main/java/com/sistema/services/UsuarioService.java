@@ -14,7 +14,7 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<Usuario> findAll() {
@@ -36,12 +36,12 @@ public class UsuarioService {
         Usuario usuario = findById(id);
         usuario.setNome(usuarioDetails.getNome());
         usuario.setEmail(usuarioDetails.getEmail());
-        
+
         // Só atualiza a senha se uma nova senha foi fornecida
         if (usuarioDetails.getSenha() != null && !usuarioDetails.getSenha().isEmpty()) {
             usuario.setSenha(passwordEncoder.encode(usuarioDetails.getSenha()));
         }
-        
+
         return usuarioRepository.save(usuario);
     }
 
@@ -49,7 +49,7 @@ public class UsuarioService {
         Usuario usuario = findById(id);
         usuarioRepository.delete(usuario);
     }
-    
+
     public Usuario findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }

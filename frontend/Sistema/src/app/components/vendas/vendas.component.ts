@@ -14,8 +14,8 @@ import { Produto } from '../../models/produto.model';
   selector: 'app-vendas',
   templateUrl: './vendas.component.html',
   styleUrls: ['./vendas.component.css'],
-  standalone: true, // Alterado para true para ser consistente com a importação no AppModule
-  imports: [CommonModule, FormsModule] // Importando os módulos necessários para o componente standalone
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class VendasComponent implements OnInit {
   vendas: Venda[] = [];

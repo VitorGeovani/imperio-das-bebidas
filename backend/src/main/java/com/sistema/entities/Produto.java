@@ -26,10 +26,10 @@ public class Produto {
     private BigDecimal preco;
 
     @Min(value = 0, message = "Quantidade não pode ser negativa")
-    private Integer quantidade; // Novo campo para controle de estoque
+    private Integer quantidade;
 
-    private String categoria; // Para categorizar os tipos de bebidas
-    
+    private String categoria;
+
     private String fornecedor;
 
     public Produto() {
