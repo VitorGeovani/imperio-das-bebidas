@@ -25,7 +25,13 @@ export class ClientesComponent implements OnInit {
   isLoading = false;
   successMessage = '';
   errorMessage = '';
+  
+  // Mensagens de erro de validação
+  nomeError = '';
   cnpjError = '';
+  enderecoError = '';
+  telefoneError = '';
+  emailError = '';
 
   constructor(private clienteService: ClienteService) { }
 
@@ -48,17 +54,65 @@ export class ClientesComponent implements OnInit {
     });
   }
 
-  saveCliente(): void {
-    // Remove formatação antes de validar
-    const cnpjLimpo = this.clienteForm.cnpj.replace(/[^\d]/g, '');
+  validateForm(): boolean {
+    let isValid = true;
     
-    // Validar CNPJ
-    if (!validateCNPJ(cnpjLimpo)) {
+    // Validação do nome (não vazio e só letras, espaços e alguns caracteres especiais)
+    if (!this.clienteForm.nome.trim()) {
+      this.nomeError = 'Nome/Razão Social é obrigatório';
+      isValid = false;
+    } else if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s.,&'-]+$/.test(this.clienteForm.nome)) {
+      this.nomeError = 'Nome/Razão Social deve conter caracteres válidos';
+      isValid = false;
+    } else {
+      this.nomeError = '';
+    }
+    
+    // Validação do CNPJ
+    const cnpjLimpo = this.clienteForm.cnpj.replace(/[^\d]/g, '');
+    if (!cnpjLimpo) {
+      this.cnpjError = 'CNPJ é obrigatório';
+      isValid = false;
+    } else if (!validateCNPJ(cnpjLimpo)) {
       this.cnpjError = 'CNPJ inválido';
+      isValid = false;
+    } else {
+      this.cnpjError = '';
+    }
+    
+    // Validação do telefone (opcional, mas deve conter apenas números e formatação)
+    if (this.clienteForm.telefone && !/^[\d\s()+-]+$/.test(this.clienteForm.telefone)) {
+      this.telefoneError = 'Telefone deve conter apenas números e símbolos válidos';
+      isValid = false;
+    } else {
+      this.telefoneError = '';
+    }
+    
+    // Validação do email (opcional, mas deve ser válido se fornecido)
+    if (this.clienteForm.email && !this.validateEmail(this.clienteForm.email)) {
+      this.emailError = 'Email inválido';
+      isValid = false;
+    } else {
+      this.emailError = '';
+    }
+    
+    return isValid;
+  }
+  
+  validateEmail(email: string): boolean {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(email);
+  }
+
+  saveCliente(): void {
+    // Validar formulário completo
+    if (!this.validateForm()) {
       return;
     }
     
-    this.cnpjError = '';
+    // Remove formatação antes de salvar
+    const cnpjLimpo = this.clienteForm.cnpj.replace(/[^\d]/g, '');
+    
     this.isLoading = true;
     this.clearMessages();
 
@@ -109,6 +163,12 @@ export class ClientesComponent implements OnInit {
       ...cliente,
       cnpj: cnpjFormatado
     };
+    // Limpar mensagens de erro
+    this.nomeError = '';
+    this.cnpjError = '';
+    this.enderecoError = '';
+    this.telefoneError = '';
+    this.emailError = '';
   }
 
   deleteCliente(id: number): void {
@@ -140,7 +200,12 @@ export class ClientesComponent implements OnInit {
       telefone: '',
       email: ''
     };
+    // Limpar mensagens de erro
+    this.nomeError = '';
     this.cnpjError = '';
+    this.enderecoError = '';
+    this.telefoneError = '';
+    this.emailError = '';
   }
 
   clearMessages(): void {

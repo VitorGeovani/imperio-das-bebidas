@@ -16,6 +16,11 @@ export class UsuariosComponent implements OnInit {
   isLoading: boolean = false;
   showForm: boolean = false;
   hidePassword: boolean = true;
+  
+  // Mensagens de erro de validação
+  nomeError: string = '';
+  emailError: string = '';
+  senhaError: string = '';
 
   constructor(private usuarioService: UsuarioService) { }
 
@@ -37,15 +42,51 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  validateForm(): boolean {
+    let isValid = true;
     this.formError = '';
-    if (!this.usuarioForm.nome || !this.usuarioForm.email || (!this.isEditing && !this.usuarioForm.senha)) {
-      this.formError = 'Por favor, preencha todos os campos.';
-      return;
+    
+    // Validar nome
+    if (!this.usuarioForm.nome.trim()) {
+      this.nomeError = 'Nome é obrigatório';
+      isValid = false;
+    } else if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s.]+$/.test(this.usuarioForm.nome)) {
+      this.nomeError = 'Nome deve conter apenas letras e espaços';
+      isValid = false;
+    } else {
+      this.nomeError = '';
     }
 
-    if (!this.validateEmail(this.usuarioForm.email)) {
-      this.formError = 'Email inválido.';
+    // Validar email
+    if (!this.usuarioForm.email.trim()) {
+      this.emailError = 'Email é obrigatório';
+      isValid = false;
+    } else if (!this.validateEmail(this.usuarioForm.email)) {
+      this.emailError = 'Email inválido';
+      isValid = false;
+    } else {
+      this.emailError = '';
+    }
+
+    // Validar senha (apenas se não estiver editando ou se uma nova senha for fornecida)
+    if (!this.isEditing && !this.usuarioForm.senha) {
+      this.senhaError = 'Senha é obrigatória';
+      isValid = false;
+    } else if (!this.isEditing && this.usuarioForm.senha.length < 6) {
+      this.senhaError = 'A senha deve ter pelo menos 6 caracteres';
+      isValid = false;
+    } else if (this.isEditing && this.usuarioForm.senha && this.usuarioForm.senha.length < 6) {
+      this.senhaError = 'A senha deve ter pelo menos 6 caracteres';
+      isValid = false;
+    } else {
+      this.senhaError = '';
+    }
+
+    return isValid;
+  }
+
+  onSubmit(): void {
+    if (!this.validateForm()) {
       return;
     }
 
@@ -81,6 +122,11 @@ export class UsuariosComponent implements OnInit {
     this.usuarioForm = {...usuario, senha: ''};
     this.isEditing = true;
     this.showForm = true;
+    
+    // Limpar mensagens de erro
+    this.nomeError = '';
+    this.emailError = '';
+    this.senhaError = '';
   }
 
   deleteUsuario(id: number): void {
@@ -103,6 +149,11 @@ export class UsuariosComponent implements OnInit {
     this.isEditing = false;
     this.formError = '';
     this.showForm = false;
+    
+    // Limpar mensagens de erro
+    this.nomeError = '';
+    this.emailError = '';
+    this.senhaError = '';
   }
 
   toggleForm(): void {

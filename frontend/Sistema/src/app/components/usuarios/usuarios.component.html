@@ -15,23 +15,56 @@
         <form (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" [(ngModel)]="usuarioForm.nome" name="nome" required>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="nome" 
+              [(ngModel)]="usuarioForm.nome" 
+              name="nome" 
+              required
+              [ngClass]="{'is-invalid': nomeError}"
+            >
+            <div class="invalid-feedback" *ngIf="nomeError">
+              {{ nomeError }}
+            </div>
           </div>
           
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" [(ngModel)]="usuarioForm.email" name="email" required>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email" 
+              [(ngModel)]="usuarioForm.email" 
+              name="email" 
+              required
+              [ngClass]="{'is-invalid': emailError}"
+            >
+            <div class="invalid-feedback" *ngIf="emailError">
+              {{ emailError }}
+            </div>
           </div>
           
           <div class="mb-3">
             <label for="senha" class="form-label">{{ isEditing ? 'Nova Senha (deixe em branco para manter a atual)' : 'Senha' }}</label>
             <div class="input-group">
-              <input [type]="hidePassword ? 'password' : 'text'" class="form-control" id="senha" 
-                    [(ngModel)]="usuarioForm.senha" name="senha" [required]="!isEditing">
+              <input 
+                [type]="hidePassword ? 'password' : 'text'" 
+                class="form-control" 
+                id="senha" 
+                [(ngModel)]="usuarioForm.senha" 
+                name="senha" 
+                [required]="!isEditing"
+                [ngClass]="{'is-invalid': senhaError}"
+              >
               <button type="button" class="btn btn-outline-secondary" (click)="hidePassword = !hidePassword">
                 <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"></i>
               </button>
+              <div class="invalid-feedback" *ngIf="senhaError">
+                {{ senhaError }}
+              </div>
             </div>
+            <small *ngIf="!isEditing" class="form-text text-muted">A senha deve ter pelo menos 6 caracteres.</small>
           </div>
           
           <div class="d-flex justify-content-end">

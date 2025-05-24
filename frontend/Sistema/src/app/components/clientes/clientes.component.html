@@ -13,14 +13,33 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="nome" class="form-label">Nome/Razão Social</label>
-            <input type="text" class="form-control" id="nome" [(ngModel)]="clienteForm.nome" name="nome" required>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="nome" 
+              [(ngModel)]="clienteForm.nome" 
+              name="nome" 
+              required
+              [ngClass]="{'is-invalid': nomeError}"
+            >
+            <div class="invalid-feedback" *ngIf="nomeError">
+              {{ nomeError }}
+            </div>
           </div>
           
           <div class="col-md-6 mb-3">
             <label for="cnpj" class="form-label">CNPJ</label>
-            <input type="text" class="form-control" id="cnpj" [(ngModel)]="clienteForm.cnpj" name="cnpj" 
-                  (input)="formatCnpj($event)" maxlength="18" required 
-                  [ngClass]="{'is-invalid': cnpjError}">
+            <input 
+              type="text" 
+              class="form-control" 
+              id="cnpj" 
+              [(ngModel)]="clienteForm.cnpj" 
+              name="cnpj" 
+              (input)="formatCnpj($event)" 
+              maxlength="18" 
+              required 
+              [ngClass]="{'is-invalid': cnpjError}"
+            >
             <div class="invalid-feedback" *ngIf="cnpjError">
               {{ cnpjError }}
             </div>
@@ -30,18 +49,49 @@
         
         <div class="mb-3">
           <label for="endereco" class="form-label">Endereço</label>
-          <input type="text" class="form-control" id="endereco" [(ngModel)]="clienteForm.endereco" name="endereco">
+          <input 
+            type="text" 
+            class="form-control" 
+            id="endereco" 
+            [(ngModel)]="clienteForm.endereco" 
+            name="endereco"
+            [ngClass]="{'is-invalid': enderecoError}"
+          >
+          <div class="invalid-feedback" *ngIf="enderecoError">
+            {{ enderecoError }}
+          </div>
         </div>
         
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="telefone" class="form-label">Telefone</label>
-            <input type="text" class="form-control" id="telefone" [(ngModel)]="clienteForm.telefone" name="telefone">
+            <input 
+              type="tel" 
+              class="form-control" 
+              id="telefone" 
+              [(ngModel)]="clienteForm.telefone" 
+              name="telefone"
+              [ngClass]="{'is-invalid': telefoneError}"
+            >
+            <div class="invalid-feedback" *ngIf="telefoneError">
+              {{ telefoneError }}
+            </div>
+            <small class="form-text text-muted">Ex: (11) 98765-4321</small>
           </div>
           
           <div class="col-md-6 mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" [(ngModel)]="clienteForm.email" name="email">
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email" 
+              [(ngModel)]="clienteForm.email" 
+              name="email"
+              [ngClass]="{'is-invalid': emailError}"
+            >
+            <div class="invalid-feedback" *ngIf="emailError">
+              {{ emailError }}
+            </div>
           </div>
         </div>
         
