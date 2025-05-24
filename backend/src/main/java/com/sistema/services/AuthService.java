@@ -22,18 +22,18 @@ public class AuthService {
         System.out.println("Autenticando usuário: " + email);
         
         // Verificar credenciais de admin hardcoded
-        if ("admin".equals(email) && "admin123".equals(senha)) {
+        if ("admin@imperio.com".equals(email) && "admin123".equals(senha)) {
             System.out.println("Autenticação bem-sucedida para admin");
             // Criar um usuário admin fictício para autenticação
             Usuario adminUser = new Usuario();
             adminUser.setId(1L);
             adminUser.setNome("Administrador");
-            adminUser.setEmail("admin");
+            adminUser.setEmail("admin@imperio.com");
             return Optional.of(adminUser);
         }
         
         // Verificar credenciais de usuário padrão
-        if ("user".equals(email) && "user123".equals(senha)) {
+        if ("funcionario@imperio.com".equals(email) && "func123".equals(senha)) {
             System.out.println("Autenticação bem-sucedida para user");
             Usuario standardUser = new Usuario();
             standardUser.setId(2L);
